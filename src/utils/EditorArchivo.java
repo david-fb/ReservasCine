@@ -78,7 +78,7 @@ public class EditorArchivo {
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
-                String[] arrLinea = linea.split(separador);
+                String[] arrLinea = linea.trim().split(separador);
                 if (arrLinea[posicion_busqueda].equals(valor_busqueda)) {
                     textoEncontrado += linea + "\n";
                 }
