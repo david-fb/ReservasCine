@@ -6,20 +6,30 @@ package model;
  */
 public final class Usuario {
 
-    private int user_id;
+    private final int user_id;
     private String user_login;
     private String user_name;
     private String password;
+    private String user_role;
 
-    public Usuario(int user_id, String user_login, String user_name, String password) {
+    public Usuario(int user_id, String user_login, String user_name, String password, String user_role) {
         this.user_id = user_id;
         this.user_login = user_login;
         this.user_name = user_name;
         this.password = password;
+        this.user_role = user_role;
     }
 
     public int getUser_id() {
         return user_id;
+    }
+
+    public String getUser_role() {
+        return user_role;
+    }
+
+    public void setUser_role(String user_role) {
+        this.user_role = user_role;
     }
 
     public String getUser_login() {

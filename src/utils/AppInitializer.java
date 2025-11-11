@@ -10,6 +10,8 @@ public class AppInitializer {
         "usuarios.txt",
         "sala.txt",
         "Asiento.txt",
+        "peliculas.txt",
+        "funciones.txt"
     };
     
     private static final EditorArchivo editor = new EditorArchivo();
