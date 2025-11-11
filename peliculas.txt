@@ -1,9 +1,0 @@
-1,La vida es Bella,Drama,132m
-2,Interstellar,Sci-Fi,169m
-3,Bastardos sin gloria,Drama,132m
-4,Stains gate,Sci-Fi,169m
-5,Los Colores de la montaña,Drama,132m
-10,La vida es Bella,Drama,132m
-11,David Basto,Sci-Fi,169m
-10,La vida es Bella,Drama,132m
-11,David Basto,Sci-Fi,169m
