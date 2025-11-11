@@ -37,9 +37,9 @@ public class PeliculasService {
         editor.addLinea(this.FILENAME, registro);
     }
     
-    public Pelicula getPeliculaById(int user_id){
+    public Pelicula getPeliculaById(int pelicula_id){
         
-        String id = String.valueOf(user_id);
+        String id = String.valueOf(pelicula_id);
         String[] pLineas = editor.getRegistro(FILENAME, 0, id, SEPARADOR).split(SEPARADOR);
         
         return new Pelicula(Integer.parseInt(pLineas[0]), pLineas[1], pLineas[2], pLineas[3],pLineas[4]);
