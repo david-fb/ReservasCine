@@ -68,16 +68,4 @@ public class Asiento {
         this.sala = sala;
     }
     
-    public void reservarAsiento(){
-    
-    }
-    
-    public void liberarAsiento(){
-    
-    }
-    
-    public void mostrarEstadoAsiento(){
-    
-    }
-    
 }

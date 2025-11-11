@@ -8,7 +8,7 @@ import utils.AppInitializer;
  * @author david-fb - David Basto
  */
 public class App {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         
         AppInitializer.initialize();
         UsuarioService usuarioService = new UsuarioService();
@@ -29,6 +29,6 @@ public class App {
         
         
         usuarioService.updateUser(1, "David Martinez", "");
-        System.out.println(usuarioService.getUserById(1).toString());
-    }
+        System.out.println(usuarioService.getUserById(1).toString());      
+    }*/
 }

@@ -153,7 +153,7 @@ public class EditorArchivo {
 
     // Metodo privado retorna lista o arr de las lineas del archivo
     // uso exclusivamente de la clase.
-    private List<String> leerArchivo(File archivo) {
+    public List<String> leerArchivo(File archivo) {
         List<String> lineas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;

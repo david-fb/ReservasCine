@@ -58,15 +58,7 @@ public class Sala {
         this.tipo = tipo;
     }
     
-    //Registrar los datos
-    public void registrarSala(){
-    
-    }
-    
-    //Modificar los datos
-    public void actualizarSala(){
-    
-    }
+
     
     
 }
