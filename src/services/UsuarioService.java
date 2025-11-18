@@ -76,7 +76,7 @@ public class UsuarioService {
         editor.eliminarLineaPorId(FILENAME, SEPARADOR, user_id);
     }
     
-    public boolean login(String user_login, String password){
+    public Usuario login(String user_login, String password){
         String registro = editor.getRegistro(FILENAME, 1, user_login, SEPARADOR);
         String[] userLineas = {};
         
@@ -86,9 +86,14 @@ public class UsuarioService {
         }
         
         if(userLineas.length == 0){
-            return false;
+            return null;
         }
         Usuario usuario = new Usuario(Integer.parseInt(userLineas[0]), userLineas[1], userLineas[2], userLineas[3], userLineas[4]);
-        return usuario.getUser_login().equalsIgnoreCase(user_login) && usuario.getPassword().equals(password);
+        if(usuario.getUser_login().equalsIgnoreCase(user_login) && usuario.getPassword().equals(password)){
+            return usuario;
+        } else {
+            return null;
+        }
+        
     }
 }

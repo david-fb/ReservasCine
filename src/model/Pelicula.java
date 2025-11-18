@@ -15,6 +15,7 @@ public class Pelicula {
     private String genero;
     private String duracion;
     private String clasificacion;
+    private String rutaImagen;
 
     public Pelicula(int idPelicula, String titulo, String genero, String duracion, String clasificacion) {
         this.idPelicula = idPelicula;
@@ -24,8 +25,16 @@ public class Pelicula {
         this.clasificacion = clasificacion;
     }
 
+    public Pelicula(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
     public void setIdPelicula(int idPelicula) {
         this.idPelicula = idPelicula;
+    }
+
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
     }
 
     public void setTitulo(String titulo) {
@@ -69,4 +78,8 @@ public class Pelicula {
     }
 
     public String getTitulo() { return titulo; }
+
+    public String getRutaImagen() {
+       return "src/assets/peliculas/bastardos-sin-gloria-poster.jpg";
+    }
 }

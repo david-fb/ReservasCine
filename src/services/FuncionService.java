@@ -2,6 +2,8 @@ package services;
 
 import java.util.ArrayList;
 import model.Funcion;
+import model.Pelicula;
+import model.Sala;
 import utils.EditorArchivo;
 
 /**
@@ -12,6 +14,8 @@ public class FuncionService {
     private final EditorArchivo editor = new EditorArchivo();
     private final String FILENAME = "funciones.txt";
     private final String SEPARADOR = ";";
+    PeliculasService peliculasService = new PeliculasService();
+    SalaService salaService = new SalaService();
     
     public ArrayList<Funcion> listarFunciones() {
         ArrayList<String> lineas = editor.getAll(FILENAME, SEPARADOR);
@@ -20,7 +24,14 @@ public class FuncionService {
         for(int i = 0; i < lineas.size(); i++){
             String[] arrLinea = lineas.get(i).split(this.SEPARADOR);
             System.out.println(arrLinea[1]);
-            funciones.add(new Funcion(Integer.parseInt(arrLinea[0]), arrLinea[1], arrLinea[2], Integer.parseInt(arrLinea[3]),Integer.parseInt(arrLinea[4]), Double.parseDouble(arrLinea[5])));
+            Funcion funcion = new Funcion(Integer.parseInt(arrLinea[0]), arrLinea[1], arrLinea[2], Integer.parseInt(arrLinea[3]),Integer.parseInt(arrLinea[4]), Double.parseDouble(arrLinea[5]));
+            Pelicula pelicula = peliculasService.getPeliculaById(Integer.parseInt(arrLinea[4]));
+            funcion.setPelicula(pelicula);
+            
+            Sala sala = salaService.getSala(Integer.parseInt(arrLinea[3]));
+            funcion.setSala(sala);
+            
+            funciones.add(funcion);
         }
         
         return funciones;
@@ -38,7 +49,17 @@ public class FuncionService {
         String id = String.valueOf(funcion_id);
         String[] fLineas = editor.getRegistro(FILENAME, 0, id, SEPARADOR).split(SEPARADOR);
         
-        return new Funcion(Integer.parseInt(fLineas[0]), fLineas[1], fLineas[2], Integer.parseInt(fLineas[3]),Integer.parseInt(fLineas[4]), Double.parseDouble(fLineas[5]));
+        Pelicula pelicula = peliculasService.getPeliculaById(Integer.parseInt(fLineas[4]));
+        
+        Funcion funcion = new Funcion(Integer.parseInt(fLineas[0]), fLineas[1], fLineas[2], Integer.parseInt(fLineas[3]),Integer.parseInt(fLineas[4]), Double.parseDouble(fLineas[5]));
+        
+        funcion.setPelicula(pelicula);
+        
+        Sala sala = salaService.getSala(Integer.parseInt(fLineas[3]));
+        
+        funcion.setSala(sala);
+        
+        return funcion;
     }
     
     public Funcion updateFuncion(int idFuncion, String fecha, String hora,  int sala, int pelicula, double precioEntrada){
@@ -70,5 +91,6 @@ public class FuncionService {
     public void deleteFuncion(int IdFuncion){
         editor.eliminarLineaPorId(FILENAME, SEPARADOR, IdFuncion);
     }
+
 }
 

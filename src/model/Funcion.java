@@ -15,6 +15,24 @@ public class Funcion {
     private int fk_sala;
     private int fk_pelicula;
     private double precioEntrada;
+    private Pelicula pelicula;
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
+    }
+    private Sala sala;
+
+    public Pelicula getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+        this.pelicula = pelicula;
+    }
 
     public Funcion(int idFuncion, String fecha, String hora,  int sala, int pelicula, double precioEntrada) {
         this.idFuncion = idFuncion;
