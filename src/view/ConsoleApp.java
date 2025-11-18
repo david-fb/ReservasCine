@@ -315,7 +315,7 @@ public class ConsoleApp {
                 leer.nextLine();
 
                 SalaService sala = new SalaService();
-                sala.registrarSala(nombre, capacidad, tipo);
+                //sala.registrarSala(nombre, capacidad, tipo);
 
                 System.out.println("Se registro la sala con exito!! ");
 

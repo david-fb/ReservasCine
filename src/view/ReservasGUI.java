@@ -13,7 +13,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import model.Pelicula;
+import model.Sala;
+import java.util.List;
 
 public class ReservasGUI extends JFrame {
 
@@ -104,7 +107,24 @@ public class ReservasGUI extends JFrame {
 
         cargarUsuariosComboBox();
         cargarFuncionesComboBox();
-        cargarAsientosComboBox();
+
+        String primero = (String) funcionComboBox.getSelectedItem();
+        if (primero != null) {
+            Funcion f = obtenerFuncionDesdeTexto(primero);
+            if (f != null) {
+                cargarAsientosComboBox(f);
+            }
+        }
+
+        funcionComboBox.addActionListener(e -> {
+            String texto = (String) funcionComboBox.getSelectedItem();
+            if (texto != null) {
+                Funcion f = obtenerFuncionDesdeTexto(texto);
+                if (f != null) {
+                    cargarAsientosComboBox(f);
+                }
+            }
+        });
 
         formPanel.add(new JLabel("Usuario:"));
         formPanel.add(usuarioComboBox);
@@ -141,17 +161,16 @@ public class ReservasGUI extends JFrame {
 
             Funcion funcion = funcionService.getFuncionById(r.getFk_Funcion());
             String descFuncion = (funcion != null)
-                    ? funcion.getFecha() + " - " + funcionService.getFuncionById(funcion.getFk_pelicula())
+                    ? funcion.getFecha() + " - " + funcionService.getFuncionById(funcion.getIdFuncion())
                     : "Desconocida";
 
-            Asiento asiento = asientoService.getAsiento(r.getFk_Asiento());
-            String descAsiento = (asiento != null) ? asiento.getFila() + asiento.getNumero() : "Desconocido";
-
+            //Asiento asiento = asientoService.getAsiento(r.getFk_Asiento());
+            //String descAsiento = (asiento != null) ? asiento.getFila() + asiento.getNumero() : "Desconocido";
             Object[] fila = new Object[]{
                 r.getIdReserva(),
                 nombreUsuario,
                 descFuncion,
-                descAsiento,
+                r.getFk_Asiento(),
                 r.getEstado(),
                 r.getFecha_Reserva()
             };
@@ -182,22 +201,22 @@ public class ReservasGUI extends JFrame {
 
     private void crearReserva() {
         try {
-        int fkUsuario = obtenerIdDeComboBox(usuarioComboBox);
-        int fkFuncion = obtenerIdDeComboBox(funcionComboBox);
-        int fkAsiento = obtenerIdDeComboBox(asientoComboBox);
-        String estado = (String) estadoComboBox.getSelectedItem();
+            int fkUsuario = obtenerIdDeComboBox(usuarioComboBox);
+            int fkFuncion = obtenerIdDeComboBox(funcionComboBox);
+            String fkAsiento = (String) asientoComboBox.getSelectedItem();
+            String estado = (String) estadoComboBox.getSelectedItem();
 
-        String fechaReserva = fechaReservaField.getText();
+            String fechaReserva = fechaReservaField.getText();
 
-        if (fkUsuario == -1 || fkFuncion == -1 || fkAsiento == -1 || estado == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un Usuario, Función y Asiento.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+            if (fkUsuario == -1 || fkFuncion == -1 || fkAsiento == null || estado == null) {
+                JOptionPane.showMessageDialog(this, "Debe seleccionar un Usuario, Función y Asiento.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
-        reservaService.createReserva(fkUsuario, fkFuncion, fkAsiento, estado, fechaReserva);
-        JOptionPane.showMessageDialog(this, "Reserva creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        cargarDatosReservas();
-        tabbedPane.setSelectedIndex(0);
+            reservaService.createReserva(fkUsuario, fkFuncion, fkAsiento, estado, fechaReserva);
+            JOptionPane.showMessageDialog(this, "Reserva creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            cargarDatosReservas();
+            tabbedPane.setSelectedIndex(0);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al crear reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -207,7 +226,7 @@ public class ReservasGUI extends JFrame {
         try {
             int fkUsuario = obtenerIdDeComboBox(usuarioComboBox);
             int fkFuncion = obtenerIdDeComboBox(funcionComboBox);
-            int fkAsiento = obtenerIdDeComboBox(asientoComboBox);
+            String fkAsiento = (String) asientoComboBox.getSelectedItem();
             String nuevoEstado = (String) estadoComboBox.getSelectedItem();
             String nuevaFechaReserva = fechaReservaField.getText();
 
@@ -246,11 +265,11 @@ public class ReservasGUI extends JFrame {
         Reserva reserva = reservaService.getReservaById(id);
         if (reserva != null) {
             fechaReservaField.setText(reserva.getFecha_Reserva());
-            estadoComboBox.setSelectedItem(reserva.getEstado()); 
+            estadoComboBox.setSelectedItem(reserva.getEstado());
 
             seleccionarItemEnComboBox(usuarioComboBox, reserva.getFk_Usuario());
             seleccionarItemEnComboBox(funcionComboBox, reserva.getFk_Funcion());
-            seleccionarItemEnComboBox(asientoComboBox, reserva.getFk_Asiento());
+            asientoComboBox.setSelectedItem(reserva.getFk_Asiento());
 
             btnAccion.setText("💾 Guardar Cambios (Reserva ID: " + id + ")");
         } else {
@@ -262,6 +281,16 @@ public class ReservasGUI extends JFrame {
     private void resetearFormulario() {
         reservaIdAEditar = -1;
         fechaReservaField.setText("");
+        cargarUsuariosComboBox();
+        cargarFuncionesComboBox();
+
+        String primero = (String) funcionComboBox.getSelectedItem();
+        if (primero != null) {
+            Funcion f = obtenerFuncionDesdeTexto(primero);
+            if (f != null) {
+                cargarAsientosComboBox(f);
+            }
+        }
         btnAccion.setText("✅ Crear Nueva Reserva");
     }
 
@@ -304,16 +333,42 @@ public class ReservasGUI extends JFrame {
         }
     }
 
-    private void cargarAsientosComboBox() {
+    private void cargarAsientosComboBox(Funcion f) {
+
         asientoComboBox.removeAllItems();
+        Sala sala = f.getSala();
+        String[] occupiedSeat = funcionService.getAsientosOcupados(f);
 
-        ArrayList<Asiento> asientos = asientoService.getTodosLosAsientos();
+        // Convertimos el array a una lista para buscar más fácil
+        List<String> ocupados = Arrays.asList(occupiedSeat);
 
-        for (Asiento a : asientos) {
-            String item = a.getIdAsiento() + " - " + a.getFila() + a.getNumero();
-            asientoComboBox.addItem(item);
+        for (int fila = 0; fila < sala.getFilas(); fila++) {
+
+            char letraFila = (char) ('A' + fila);
+
+            for (int col = 0; col < sala.getColumnas(); col++) {
+
+                int numeroColumna = col + 1;
+                String asiento = letraFila + String.valueOf(numeroColumna);
+
+                // Si NO está ocupado → agregar al combo
+                if (!ocupados.contains(asiento)) {
+                    asientoComboBox.addItem(asiento);
+                }
+            }
         }
     }
+
+    private Funcion obtenerFuncionDesdeTexto(String texto) {
+        // dividimos antes del " - "
+        String idStr = texto.split(" - ")[0];
+
+        try {
+            int idFuncion = Integer.parseInt(idStr);
+            return funcionService.getFuncionById(idFuncion);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 }
-
-

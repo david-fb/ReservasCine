@@ -12,18 +12,35 @@ public class Sala {
     
     private int idSala;
     private String nombre;
-    private int capacidad;
     private String tipo;
-    
+    private int filas;
+    private int columnas;
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public void setFilas(int filas) {
+        this.filas = filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(int columnas) {
+        this.columnas = columnas;
+    }
     
     public Sala(){
     }
     
-    public Sala(int idSala, String nombre, int capacidad, String tipo){
+    public Sala(int idSala, String nombre, int filas, int columnas, String tipo){
     this.idSala = idSala;
     this.nombre = nombre;
-    this.capacidad = capacidad;
     this.tipo = tipo;
+    this.filas = filas;
+    this.columnas = columnas;
     }
 
     public int getIdSala() {
@@ -43,11 +60,7 @@ public class Sala {
     }
 
     public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
+        return filas * columnas;
     }
 
     public String getTipo() {

@@ -23,7 +23,7 @@ public class peliculaCard extends JPanel {
         setPreferredSize(new Dimension(180, 300));
         setBorder(BorderFactory.createLineBorder(new Color(203, 213, 225), 1));
 
-        ImageIcon icon = new ImageIcon(f.getPelicula().getRutaImagen());
+        ImageIcon icon = new ImageIcon(f.getPelicula().getRutaImagen().trim());
         Image img = icon.getImage().getScaledInstance(180, 200, Image.SCALE_SMOOTH);
         JLabel lblImagen = new JLabel(new ImageIcon(img));
 

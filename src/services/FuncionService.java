@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import model.Funcion;
 import model.Pelicula;
+import model.Reserva;
 import model.Sala;
 import utils.EditorArchivo;
 
@@ -16,6 +17,7 @@ public class FuncionService {
     private final String SEPARADOR = ";";
     PeliculasService peliculasService = new PeliculasService();
     SalaService salaService = new SalaService();
+    ReservaService reservaService = new  ReservaService();
     
     public ArrayList<Funcion> listarFunciones() {
         ArrayList<String> lineas = editor.getAll(FILENAME, SEPARADOR);
@@ -90,6 +92,17 @@ public class FuncionService {
     
     public void deleteFuncion(int IdFuncion){
         editor.eliminarLineaPorId(FILENAME, SEPARADOR, IdFuncion);
+    }
+    
+    public String[]  getAsientosOcupados(Funcion f){
+        ArrayList<Reserva> lista = reservaService.getReservasByFuncion(f.getIdFuncion());
+        String[] asientos = new String[lista.size()];
+        
+        for(int i = 0; i < asientos.length; i++){
+            asientos[i] = "" + lista.get(i).getFk_Asiento();
+        }
+        
+        return asientos;
     }
 
 }

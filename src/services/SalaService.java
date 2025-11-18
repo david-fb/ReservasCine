@@ -5,7 +5,6 @@
 package services;
 
 import java.util.ArrayList;
-import model.Reserva;
 import model.Sala;
 import utils.EditorArchivo;
 
@@ -26,9 +25,9 @@ public class SalaService {
         for (int i = 0; i < lineas.size(); i++) {
             String[] arrLinea = lineas.get(i).split(this.SEPARADOR);
             System.out.println(arrLinea[1]);
-            sala.add(new Sala(Integer.parseInt(arrLinea[0]), arrLinea[1], Integer.parseInt(arrLinea[2]), arrLinea[3]));
+            sala.add(new Sala(Integer.parseInt(arrLinea[0]), arrLinea[1], Integer.parseInt(arrLinea[2]), Integer.parseInt(arrLinea[3]), arrLinea[4]));
         }
-
+        
         return sala;
     }
 
@@ -37,14 +36,14 @@ public class SalaService {
         String id = String.valueOf(reserva_id);
         String[] fLineas = editor.getRegistro(FILENAME, 0, id, SEPARADOR).split(SEPARADOR);
 
-        return new Sala(Integer.parseInt(fLineas[0]), fLineas[1], Integer.parseInt(fLineas[2]), fLineas[3]);
+        return new Sala(Integer.parseInt(fLineas[0]), fLineas[1], Integer.parseInt(fLineas[2]), Integer.parseInt(fLineas[3]), fLineas[4]);
     }
 
-    public void registrarSala(String nombre, int capacidad, String tipo) {
+    public void registrarSala(String nombre, int filas, int columnas, String tipo) {
 
         editor.crearArchivo(FILENAME);
         int id = editor.getUltimoId(FILENAME, this.SEPARADOR) + 1;
-        String registro = String.format("%d;%s;%s;%s", id, nombre, capacidad, tipo);
+        String registro = String.format("%d;%s;%d;%d;%s", id, nombre, filas, columnas, tipo);
 
         editor.addLinea(this.FILENAME, registro);
     }
@@ -54,10 +53,10 @@ public class SalaService {
         String id = String.valueOf(idSala);
         String[] salaLineas = editor.getRegistro(FILENAME, 0, id, SEPARADOR).split(SEPARADOR);
 
-        return new Sala(Integer.parseInt(salaLineas[0]), salaLineas[1], Integer.parseInt(salaLineas[2]), salaLineas[3]);
+        return new Sala(Integer.parseInt(salaLineas[0]), salaLineas[1], Integer.parseInt(salaLineas[2]), Integer.parseInt(salaLineas[3]), salaLineas[3]);
     }
 
-    public Sala actualizarSala(int idSala, String nombre, int capacidad, String tipo) {
+    public Sala actualizarSala(int idSala, String nombre, int filas, int columnas, String tipo) {
 
         Sala sala = getSala(idSala);
 
@@ -65,15 +64,19 @@ public class SalaService {
             sala.setNombre(nombre);
         }
 
-        if (capacidad > 0) {
-            sala.setCapacidad(capacidad);
+        if (filas > 0) {
+            sala.setFilas(filas);
+        }
+        
+        if (columnas > 0) {
+            sala.setColumnas(columnas);
         }
 
         if (!tipo.isEmpty()) {
             sala.setTipo(tipo);
         }
 
-        String sala_updated = String.format("%d;%s;%s;%s", sala.getIdSala(), sala.getNombre(), sala.getCapacidad(), sala.getTipo());
+        String sala_updated = String.format("%d;%s;%d;%d;%s", sala.getIdSala(), sala.getNombre(), sala.getFilas(), sala.getColumnas(), sala.getTipo());
         editor.updateRegistro(FILENAME, String.valueOf(idSala), SEPARADOR, sala_updated);
         return sala;
     }

@@ -17,12 +17,13 @@ public class Pelicula {
     private String clasificacion;
     private String rutaImagen;
 
-    public Pelicula(int idPelicula, String titulo, String genero, String duracion, String clasificacion) {
+    public Pelicula(int idPelicula, String titulo, String genero, String duracion, String clasificacion, String rutaImagen) {
         this.idPelicula = idPelicula;
         this.titulo = titulo;
         this.genero = genero;
         this.duracion = duracion;
         this.clasificacion = clasificacion;
+        this.rutaImagen = rutaImagen;
     }
 
     public Pelicula(String rutaImagen) {
@@ -80,6 +81,6 @@ public class Pelicula {
     public String getTitulo() { return titulo; }
 
     public String getRutaImagen() {
-       return "src/assets/peliculas/bastardos-sin-gloria-poster.jpg";
+       return rutaImagen != null ? rutaImagen.trim() : "src/assets/peliculas/no-poster-available.jpg";
     }
 }

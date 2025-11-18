@@ -18,7 +18,7 @@ public class SalasGUI extends JFrame {
     // Crear o Guardar
     private JButton btnAccion;
 
-    private JTextField nombreField, capacidadField, tipoField;
+    private JTextField nombreField, filasField, columnasField, tipoField;
 
     private int salaIdAEditar = -1; // -1 indica ya que empieza desde 0 en la BD
 
@@ -42,7 +42,7 @@ public class SalasGUI extends JFrame {
     private JPanel crearPanelListado() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        String[] columnNames = {"ID", "NOMBRE", "CAPACIDAD", "TIPO"};
+        String[] columnNames = {"ID", "NOMBRE", "FILAS", "COLUMNAS", "CAPACIDAD", "TIPO"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -76,14 +76,18 @@ public class SalasGUI extends JFrame {
         JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
 
         nombreField = new JTextField();
-        capacidadField = new JTextField();
+        filasField = new JTextField();
+        columnasField = new JTextField();
         tipoField = new JTextField();
 
         formPanel.add(new JLabel("Nombre de la Sala:"));
         formPanel.add(nombreField);
 
-        formPanel.add(new JLabel("Capacidad:"));
-        formPanel.add(capacidadField);
+        formPanel.add(new JLabel("Filas:"));
+        formPanel.add(filasField);
+        
+        formPanel.add(new JLabel("Columnas:"));
+        formPanel.add(columnasField);
 
         formPanel.add(new JLabel("Tipo (2D, 3D, VIP):"));
         formPanel.add(tipoField);
@@ -107,6 +111,8 @@ public class SalasGUI extends JFrame {
             Object[] fila = new Object[]{
                 s.getIdSala(),
                 s.getNombre(),
+                s.getFilas(),
+                s.getColumnas(),
                 s.getCapacidad(),
                 s.getTipo()
             };
@@ -128,10 +134,11 @@ public class SalasGUI extends JFrame {
     private void crearSala() {
         try {
             String nombre = nombreField.getText();
-            int capacidad = Integer.parseInt(capacidadField.getText());
+            int filas = Integer.parseInt(filasField.getText());
+            int columnas = Integer.parseInt(columnasField.getText());
             String tipo = tipoField.getText();
 
-            salaService.registrarSala(nombre, capacidad, tipo);
+            salaService.registrarSala(nombre, filas, columnas, tipo);
 
             JOptionPane.showMessageDialog(this, "Sala creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {
@@ -144,10 +151,11 @@ public class SalasGUI extends JFrame {
     private void actualizarSala(int idSala) {
         try {
             String nuevoNombre = nombreField.getText();
-            int nuevaCapacidad = Integer.parseInt(capacidadField.getText());
+            int nuevoFilas = Integer.parseInt(filasField.getText());
+            int nuevoColumnas = Integer.parseInt(columnasField.getText());
             String nuevoTipo = tipoField.getText();
 
-            salaService.actualizarSala(idSala, nuevoNombre, nuevaCapacidad, nuevoTipo);
+            salaService.actualizarSala(idSala, nuevoNombre, nuevoFilas, nuevoColumnas, nuevoTipo);
 
             JOptionPane.showMessageDialog(this, "Sala ID " + idSala + " actualizada correctamente.", "Exito", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {
@@ -175,7 +183,8 @@ public class SalasGUI extends JFrame {
 
         if (sala != null) {
             nombreField.setText(sala.getNombre());
-            capacidadField.setText(String.valueOf(sala.getCapacidad()));
+            filasField.setText(String.valueOf(sala.getFilas()));
+            columnasField.setText(String.valueOf(sala.getColumnas()));
             tipoField.setText(sala.getTipo());
 
             btnAccion.setText("💾 Guardar Cambios (Sala ID: " + id + ")");
@@ -188,7 +197,8 @@ public class SalasGUI extends JFrame {
     private void resetearFormulario() {
         salaIdAEditar = -1;
         nombreField.setText("");
-        capacidadField.setText("");
+        filasField.setText("");
+        columnasField.setText("");
         tipoField.setText("");
 
         btnAccion.setText("✅ Crear Nueva Sala");

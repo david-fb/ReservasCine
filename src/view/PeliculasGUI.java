@@ -17,7 +17,7 @@ public class PeliculasGUI extends JFrame {
     private JTabbedPane tabbedPane;
     private JButton btnAccion; 
 
-    private JTextField tituloField, generoField, duracionField, clasificacionField;
+    private JTextField tituloField, generoField, duracionField, clasificacionField, rutaImagenField;
 
     private int peliculaIdAEditar = -1; // -1 indica modo Creación
 
@@ -41,7 +41,7 @@ public class PeliculasGUI extends JFrame {
     private JPanel crearPanelListado() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        String[] columnNames = {"ID", "TÍTULO", "GÉNERO", "DURACIÓN", "CLASIFICACIÓN"};
+        String[] columnNames = {"ID", "TÍTULO", "GÉNERO", "DURACIÓN", "CLASIFICACIÓN", "RUTA IMAGEN"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -79,6 +79,7 @@ public class PeliculasGUI extends JFrame {
         generoField = new JTextField();
         duracionField = new JTextField();
         clasificacionField = new JTextField();
+        rutaImagenField = new JTextField();
 
         // Etiquetas y Campos
         formPanel.add(new JLabel("Título:"));
@@ -92,6 +93,9 @@ public class PeliculasGUI extends JFrame {
 
         formPanel.add(new JLabel("Clasificación:"));
         formPanel.add(clasificacionField);
+        
+        formPanel.add(new JLabel("Ruta Imagen:"));
+        formPanel.add(rutaImagenField);
 
         btnAccion = new JButton("✅ Crear Nueva Película");
         btnAccion.addActionListener(e -> manejarAccion());
@@ -114,7 +118,8 @@ public class PeliculasGUI extends JFrame {
                 p.getTitulo(),
                 p.getGenero(),
                 p.getDuracion(),
-                p.getClasificacion()
+                p.getClasificacion(),
+                p.getRutaImagen(),
             };
             tableModel.addRow(fila);
         }
@@ -137,8 +142,13 @@ public class PeliculasGUI extends JFrame {
             String genero = generoField.getText();
             String duracion = duracionField.getText();
             String clasificacion = clasificacionField.getText();
+            String rutaImagen = rutaImagenField.getText();
+            
+            if(rutaImagen.isEmpty()){
+                rutaImagen = "src/assets/peliculas/no-poster-available.jpg";
+            }
 
-            peliculasService.createPelicula(titulo, genero, duracion, clasificacion);
+            peliculasService.createPelicula(titulo, genero, duracion, clasificacion, rutaImagen);
 
             JOptionPane.showMessageDialog(this, "Película creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
@@ -152,8 +162,13 @@ public class PeliculasGUI extends JFrame {
             String nuevoGenero = generoField.getText();
             String nuevaDuracion = duracionField.getText();
             String nuevaClasificacion = clasificacionField.getText();
+            String nuevaRutaImagen = rutaImagenField.getText();
+            
+            if(nuevaRutaImagen.isEmpty()){
+                nuevaRutaImagen = "src/assets/peliculas/no-poster-available.jpg";
+            }
 
-            peliculasService.updatePelicula(idPelicula, nuevoTitulo, nuevoGenero, nuevaDuracion, nuevaClasificacion);
+            peliculasService.updatePelicula(idPelicula, nuevoTitulo, nuevoGenero, nuevaDuracion, nuevaClasificacion, nuevaRutaImagen);
 
             JOptionPane.showMessageDialog(this, "Película ID " + idPelicula + " actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
@@ -183,6 +198,7 @@ public class PeliculasGUI extends JFrame {
             generoField.setText(pelicula.getGenero());
             duracionField.setText(pelicula.getDuracion());
             clasificacionField.setText(pelicula.getClasificacion());
+            rutaImagenField.setText(pelicula.getRutaImagen());
 
             btnAccion.setText("💾 Guardar Cambios (Película ID: " + id + ")");
         } else {
@@ -197,6 +213,7 @@ public class PeliculasGUI extends JFrame {
         generoField.setText("");
         duracionField.setText("");
         clasificacionField.setText("");
+        rutaImagenField.setText("");
 
         btnAccion.setText("✅ Crear Nueva Película");
     }

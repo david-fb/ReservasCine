@@ -59,8 +59,8 @@ public class Funcion {
     }
     @Override
     public String toString() {
-    return String.format("%-4d | %-12s | %-5s | Sala %-3d | Película ID: %-3d | $%.2f",
-            idFuncion, fecha, hora, fk_sala, fk_pelicula, precioEntrada);
+    return this.getIdFuncion() + " - " + this.getPelicula().getTitulo()
+                    + " (" + this.getFecha() + " @ " + this.getHora() + ")";
 }
 
     public int getIdFuncion() {

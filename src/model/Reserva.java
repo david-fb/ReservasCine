@@ -12,11 +12,11 @@ public class Reserva {
     private int idReserva;
     private int fk_Usuario;
     private int fk_Funcion;
-    private int fk_Asiento;
+    private String fk_Asiento;
     private String estado;
     private String fecha_Reserva;
 
-    public Reserva(int idReserva, int fk_Usuario, int fk_Funcion, int fk_Asiento, String estado, String fecha_Reserva) {
+    public Reserva(int idReserva, int fk_Usuario, int fk_Funcion, String fk_Asiento, String estado, String fecha_Reserva) {
         this.idReserva = idReserva;
         this.fk_Usuario = fk_Usuario;
         this.fk_Funcion = fk_Funcion;
@@ -51,11 +51,11 @@ public class Reserva {
         this.fk_Funcion = fk_Funcion;
     }
 
-    public int getFk_Asiento() {
+    public String getFk_Asiento() {
         return fk_Asiento;
     }
 
-    public void setFk_Asiento(int fk_Asiento) {
+    public void setFk_Asiento(String fk_Asiento) {
         this.fk_Asiento = fk_Asiento;
     }
 
