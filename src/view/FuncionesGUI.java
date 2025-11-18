@@ -1,6 +1,5 @@
 package view;
 
-import main.showFunciones;
 import model.Funcion;
 import model.Pelicula;
 import model.Sala;
@@ -36,7 +35,7 @@ public class FuncionesGUI extends JFrame {
         this.salaService = sService;
 
         setTitle("🎬 Gestión de Funciones de Cine (Swing)");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
         this.tabbedPane = new JTabbedPane();
@@ -73,11 +72,15 @@ public class FuncionesGUI extends JFrame {
 
         JButton btnActualizar = new JButton("🔄 Recargar Lista");
         btnActualizar.addActionListener(e -> cargarDatosFunciones());
-
+        JButton btnVolver = new JButton("Menu Principal");
+        btnVolver.addActionListener(e -> {
+        this.dispose();
+        });
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnActualizar);
-
+        
+        buttonPanel.add(btnVolver);
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         return panel;

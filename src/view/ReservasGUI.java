@@ -90,7 +90,11 @@ public class ReservasGUI extends JFrame {
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnRecargar);
-
+        JButton btnVolver = new JButton("Menu Principal");
+        btnVolver.addActionListener(e -> {
+        this.dispose();
+        });
+        buttonPanel.add(btnVolver);
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
     }

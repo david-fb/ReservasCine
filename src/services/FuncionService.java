@@ -30,7 +30,7 @@ public class FuncionService {
             Pelicula pelicula = peliculasService.getPeliculaById(Integer.parseInt(arrLinea[4]));
             funcion.setPelicula(pelicula);
             
-            Sala sala = salaService.getSala(Integer.parseInt(arrLinea[3]));
+            Sala sala = salaService.getSalaById(Integer.parseInt(arrLinea[3]));
             funcion.setSala(sala);
             
             funciones.add(funcion);
@@ -57,7 +57,7 @@ public class FuncionService {
         
         funcion.setPelicula(pelicula);
         
-        Sala sala = salaService.getSala(Integer.parseInt(fLineas[3]));
+        Sala sala = salaService.getSalaById(Integer.parseInt(fLineas[3]));
         
         funcion.setSala(sala);
         

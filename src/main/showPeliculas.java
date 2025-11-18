@@ -5,8 +5,9 @@
 package main;
 
 import javax.swing.SwingUtilities;
-import services.PeliculasService;
+import services.*;
 import utils.AppInitializer;
+import view.AdminMenuGUI;
 import view.PeliculasGUI;
 
 /**
@@ -14,12 +15,18 @@ import view.PeliculasGUI;
  * @author WINDOWS
  */
 public class showPeliculas {
-    public static void main(String[] args) {
-        AppInitializer.initialize();
-        PeliculasService peliculasService = new PeliculasService();
 
-        
-        SwingUtilities.invokeLater(() -> {
-            new PeliculasGUI(peliculasService);
-        });
-}}
+    public static void main(String[] args) {
+
+        SalaService salaService = new SalaService();
+        PeliculasService  peliculasService = new PeliculasService();
+        FuncionService funcionService = new FuncionService();  
+        ReservaService reservaService = new ReservaService();
+        UsuarioService usuarioService = new UsuarioService();
+        AsientoService asientoService = new AsientoService();
+       
+
+// Inicializar el Menú (pasando todos los servicios que necesita)
+        AdminMenuGUI menu = new AdminMenuGUI(peliculasService, funcionService, salaService, reservaService,usuarioService, asientoService);
+    }
+}

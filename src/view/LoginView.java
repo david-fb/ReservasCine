@@ -6,6 +6,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import static javax.swing.SwingConstants.CENTER;
 import model.Usuario;
+import services.AsientoService;
+import services.FuncionService;
+import services.PeliculasService;
+import services.ReservaService;
+import services.SalaService;
 import services.UsuarioService;
 import utils.SessionManager;
 import utils.components.AppStyle;
@@ -161,9 +166,23 @@ public class LoginView extends JFrame {
                 JOptionPane.showMessageDialog(this, "Usuario y/o Contrasena incorrectos");
             } else {
                 SessionManager.getInstance().iniciarSesion(usuario);
-                MenuView menuView = new MenuView();
-                menuView.setVisible(true);
-                this.dispose();
+                
+                if(SessionManager.getInstance().isAdmin()){
+                    SalaService salaService = new SalaService();
+                    PeliculasService  peliculasService = new PeliculasService();
+                    FuncionService funcionService = new FuncionService();  
+                    ReservaService reservaService = new ReservaService();
+                    UsuarioService usuarioService = new UsuarioService();
+                    AsientoService asientoService = new AsientoService();
+                    
+                    AdminMenuGUI menu = new AdminMenuGUI(peliculasService, funcionService, salaService, reservaService,usuarioService, asientoService);
+                    this.dispose();
+                } else {
+                    MenuView menuView = new MenuView();
+                    menuView.setVisible(true);
+                    this.dispose();
+                }
+                
             }
         });
 

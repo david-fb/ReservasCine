@@ -167,7 +167,7 @@ public class EditorArchivo {
     }
 
     // Sobrescribir el archivo con una lista de líneas nuevas actualizadas.
-    private void guardarLineas(List<String> lineas, File archivo) {
+    public void guardarLineas(List<String> lineas, File archivo) {
 
         if (!archivo.exists()) {
             return;
