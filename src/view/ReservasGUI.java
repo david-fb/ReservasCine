@@ -1,9 +1,9 @@
 package view;
 
 import model.Reserva;
-import model.Usuario; // Asumimos que existe
-import model.Funcion; // Asumimos que existe
-import model.Asiento; // Asumimos que existe
+import model.Usuario;
+import model.Funcion;
+import model.Asiento;
 import services.ReservaService;
 import services.UsuarioService;
 import services.FuncionService;
@@ -24,20 +24,18 @@ public class ReservasGUI extends JFrame {
     private final AsientoService asientoService;
     private final PeliculasService peliculasService;
 
-    // Componentes de la Interfaz
     private JTable reservasTable;
     private DefaultTableModel tableModel;
     private JTabbedPane tabbedPane;
-    private JButton btnAccion; // Crear o Guardar Cambios
+    private JButton btnAccion;
 
     // Campos del Formulario
     private JComboBox<String> usuarioComboBox;
     private JComboBox<String> funcionComboBox;
     private JComboBox<String> asientoComboBox;
-    private JComboBox<String> estadoComboBox; // Para el estado (Activa, Cancelada, etc.)
-    private JTextField fechaReservaField; // Para la fecha de la reserva
+    private JComboBox<String> estadoComboBox;
+    private JTextField fechaReservaField;
 
-    // Estado de Edición
     private int reservaIdAEditar = -1;
 
     public ReservasGUI(ReservaService rService, UsuarioService uService,
@@ -49,7 +47,7 @@ public class ReservasGUI extends JFrame {
         this.asientoService = aService;
         this.peliculasService = pService;
         setTitle("🎟️ Gestión de Reservas");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cerrar solo esta ventana
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
 
@@ -62,7 +60,6 @@ public class ReservasGUI extends JFrame {
         setVisible(true);
     }
 
-// --- MÉTODOS DE LA GUI (Listado, Gestión, Carga de datos) ---
     private JPanel crearPanelListado() {
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -99,19 +96,16 @@ public class ReservasGUI extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
 
-        // Inicializar componentes
         usuarioComboBox = new JComboBox<>();
         funcionComboBox = new JComboBox<>();
         asientoComboBox = new JComboBox<>();
         estadoComboBox = new JComboBox<>(new String[]{"ACTIVA", "CANCELADA", "COMPLETADA"});
         fechaReservaField = new JTextField();
 
-        // Cargar datos a los ComboBoxes (Necesitas implementar estos métodos)
         cargarUsuariosComboBox();
         cargarFuncionesComboBox();
         cargarAsientosComboBox();
 
-        // Etiquetas y Campos
         formPanel.add(new JLabel("Usuario:"));
         formPanel.add(usuarioComboBox);
 
@@ -127,7 +121,6 @@ public class ReservasGUI extends JFrame {
         formPanel.add(new JLabel("Fecha de Reserva (dd-mm-aaaa):"));
         formPanel.add(fechaReservaField);
 
-        // Botón de Acción
         btnAccion = new JButton("✅ Crear Nueva Reserva");
         btnAccion.addActionListener(e -> manejarAccion());
 
@@ -143,17 +136,16 @@ public class ReservasGUI extends JFrame {
         ArrayList<Reserva> lista = reservaService.listarReservas();
 
         for (Reserva r : lista) {
-            // Obtener datos descriptivos de las FK
             Usuario usuario = usuarioService.getUserById(r.getFk_Usuario());
             String nombreUsuario = (usuario != null) ? usuario.getUser_name() : "Desconocido";
 
             Funcion funcion = funcionService.getFuncionById(r.getFk_Funcion());
             String descFuncion = (funcion != null)
-                    ? funcion.getFecha() + " - " + funcionService.getFuncionById(funcion.getFk_pelicula()) // Asumo un método que devuelve el nombre de la peli
+                    ? funcion.getFecha() + " - " + funcionService.getFuncionById(funcion.getFk_pelicula())
                     : "Desconocida";
 
             Asiento asiento = asientoService.getAsiento(r.getFk_Asiento());
-            String descAsiento = (asiento != null) ? asiento.getFila() + asiento.getNumero() : "Desconocido"; // Asumo que Asiento tiene Fila y Número
+            String descAsiento = (asiento != null) ? asiento.getFila() + asiento.getNumero() : "Desconocido";
 
             Object[] fila = new Object[]{
                 r.getIdReserva(),
@@ -176,7 +168,6 @@ public class ReservasGUI extends JFrame {
         resetearFormulario();
     }
 
-    // Método para obtener el ID de un ComboBox (ya implementado en FuncionesGUI)
     private int obtenerIdDeComboBox(JComboBox<String> comboBox) {
         String selectedItem = (String) comboBox.getSelectedItem();
         if (selectedItem == null || selectedItem.isEmpty()) {
@@ -190,26 +181,26 @@ public class ReservasGUI extends JFrame {
     }
 
     private void crearReserva() {
-        //try {
-            int fkUsuario = obtenerIdDeComboBox(usuarioComboBox);
-            int fkFuncion = obtenerIdDeComboBox(funcionComboBox);
-            int fkAsiento = obtenerIdDeComboBox(asientoComboBox);
-            String estado = (String) estadoComboBox.getSelectedItem();
-            
-            String fechaReserva = fechaReservaField.getText();
+        try {
+        int fkUsuario = obtenerIdDeComboBox(usuarioComboBox);
+        int fkFuncion = obtenerIdDeComboBox(funcionComboBox);
+        int fkAsiento = obtenerIdDeComboBox(asientoComboBox);
+        String estado = (String) estadoComboBox.getSelectedItem();
 
-            if (fkUsuario == -1 || fkFuncion == -1 || fkAsiento == -1 || estado == null) {
-                JOptionPane.showMessageDialog(this, "Debe seleccionar un Usuario, Función y Asiento.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+        String fechaReserva = fechaReservaField.getText();
 
-            reservaService.createReserva(fkUsuario, fkFuncion, fkAsiento, estado, fechaReserva);
-            JOptionPane.showMessageDialog(this, "Reserva creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-            cargarDatosReservas();
-            tabbedPane.setSelectedIndex(0);
-        /*} catch (Exception ex) {
+        if (fkUsuario == -1 || fkFuncion == -1 || fkAsiento == -1 || estado == null) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un Usuario, Función y Asiento.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        reservaService.createReserva(fkUsuario, fkFuncion, fkAsiento, estado, fechaReserva);
+        JOptionPane.showMessageDialog(this, "Reserva creada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        cargarDatosReservas();
+        tabbedPane.setSelectedIndex(0);
+        } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error al crear reserva: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }*/
+        }
     }
 
     private void actualizarReserva(int idReserva) {
@@ -220,7 +211,6 @@ public class ReservasGUI extends JFrame {
             String nuevoEstado = (String) estadoComboBox.getSelectedItem();
             String nuevaFechaReserva = fechaReservaField.getText();
 
-            // Llama al método updateReserva del servicio (asumo que existe un método con estos parámetros)
             reservaService.updateReserva(idReserva, fkUsuario, fkFuncion, fkAsiento, nuevoEstado, nuevaFechaReserva);
 
             JOptionPane.showMessageDialog(this, "Reserva ID " + idReserva + " actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -242,7 +232,6 @@ public class ReservasGUI extends JFrame {
         tabbedPane.setSelectedIndex(1);
     }
 
-    // Método de utilidad para seleccionar el item por ID
     private void seleccionarItemEnComboBox(JComboBox<String> comboBox, int id) {
         for (int i = 0; i < comboBox.getItemCount(); i++) {
             String item = comboBox.getItemAt(i);
@@ -257,9 +246,8 @@ public class ReservasGUI extends JFrame {
         Reserva reserva = reservaService.getReservaById(id);
         if (reserva != null) {
             fechaReservaField.setText(reserva.getFecha_Reserva());
-            estadoComboBox.setSelectedItem(reserva.getEstado()); // Seleccionar el estado
+            estadoComboBox.setSelectedItem(reserva.getEstado()); 
 
-            // Seleccionar FKs en ComboBoxes
             seleccionarItemEnComboBox(usuarioComboBox, reserva.getFk_Usuario());
             seleccionarItemEnComboBox(funcionComboBox, reserva.getFk_Funcion());
             seleccionarItemEnComboBox(asientoComboBox, reserva.getFk_Asiento());
@@ -274,12 +262,10 @@ public class ReservasGUI extends JFrame {
     private void resetearFormulario() {
         reservaIdAEditar = -1;
         fechaReservaField.setText("");
-        // Limpiar ComboBoxes si es necesario, o solo asegurar que se muestre el primer elemento.
         btnAccion.setText("✅ Crear Nueva Reserva");
     }
 
     private void eliminarReserva() {
-        // Lógica similar a eliminarFuncion
         int selectedRow = reservasTable.getSelectedRow();
         if (selectedRow == -1) {
             return;
@@ -297,10 +283,8 @@ public class ReservasGUI extends JFrame {
 
     private void cargarUsuariosComboBox() {
         usuarioComboBox.removeAllItems();
-        // Asume que UsuarioService tiene listarUsuarios()
         ArrayList<Usuario> usuarios = usuarioService.listarUsuarios();
         for (Usuario u : usuarios) {
-            // Formato: ID - Nombre
             usuarioComboBox.addItem(u.getUser_id() + " - " + u.getUser_name());
         }
     }
@@ -308,14 +292,11 @@ public class ReservasGUI extends JFrame {
     private void cargarFuncionesComboBox() {
         funcionComboBox.removeAllItems();
 
-        // Asume que FuncionService.listarFunciones() devuelve un ArrayList<Funcion>
         ArrayList<Funcion> funciones = funcionService.listarFunciones();
         for (Funcion f : funciones) {
-            // Obtener el nombre de la película para la descripción
             Pelicula peli = peliculasService.getPeliculaById(f.getFk_pelicula());
             String nombrePelicula = (peli != null) ? peli.getTitulo() : "Pelicula Desconocida";
 
-            // Formato para mostrar: ID - Película (Fecha @ Hora)
             String item = f.getIdFuncion() + " - " + nombrePelicula
                     + " (" + f.getFecha() + " @ " + f.getHora() + ")";
 
@@ -326,17 +307,13 @@ public class ReservasGUI extends JFrame {
     private void cargarAsientosComboBox() {
         asientoComboBox.removeAllItems();
 
-        // Asume que AsientoService.listarAsientos() devuelve un ArrayList<Asiento>
         ArrayList<Asiento> asientos = asientoService.getTodosLosAsientos();
 
         for (Asiento a : asientos) {
-            // Asume que Asiento tiene un ID, Fila y Número
-            // Formato para mostrar: ID - Fila+Número (Ej: 10 - A5)
             String item = a.getIdAsiento() + " - " + a.getFila() + a.getNumero();
-
             asientoComboBox.addItem(item);
         }
     }
 }
 
-    // ... implementar cargarFuncionesComboBox() y cargarAsientosComboBox() de forma similar.
+
