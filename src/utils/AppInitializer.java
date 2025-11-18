@@ -12,7 +12,8 @@ public class AppInitializer {
         "Asiento.txt",
         "peliculas.txt",
         "funciones.txt",
-        "reservas.txt"
+        "reservas.txt",
+        "productos.txt"
     };
     
     private static final EditorArchivo editor = new EditorArchivo();
