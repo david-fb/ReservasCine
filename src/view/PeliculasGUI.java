@@ -1,7 +1,7 @@
 package view;
 
 import model.Pelicula;
-import services.PeliculasService; 
+import services.PeliculasService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,7 +15,7 @@ public class PeliculasGUI extends JFrame {
     private JTable peliculasTable;
     private DefaultTableModel tableModel;
     private JTabbedPane tabbedPane;
-    private JButton btnAccion; 
+    private JButton btnAccion;
 
     private JTextField tituloField, generoField, duracionField, clasificacionField;
 
@@ -51,7 +51,7 @@ public class PeliculasGUI extends JFrame {
         peliculasTable = new JTable(tableModel);
         panel.add(new JScrollPane(peliculasTable), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new GridLayout());
 
         JButton btnEditar = new JButton("✏️ Editar Película Seleccionada");
         btnEditar.addActionListener(e -> iniciarEdicion());
@@ -61,11 +61,14 @@ public class PeliculasGUI extends JFrame {
 
         JButton btnRecargar = new JButton("🔄 Recargar Lista");
         btnRecargar.addActionListener(e -> cargarDatosPeliculas());
-
+        JButton btnVolver = new JButton("Menu Principal");
+        btnVolver.addActionListener(e -> {
+            this.dispose();
+        });
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnRecargar);
-
+        buttonPanel.add(btnVolver);
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
     }
@@ -127,7 +130,7 @@ public class PeliculasGUI extends JFrame {
             actualizarPelicula(peliculaIdAEditar);
         }
         resetearFormulario();
-        cargarDatosPeliculas(); 
+        cargarDatosPeliculas();
         tabbedPane.setSelectedIndex(0);
     }
 

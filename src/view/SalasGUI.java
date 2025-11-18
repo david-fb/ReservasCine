@@ -52,7 +52,7 @@ public class SalasGUI extends JFrame {
         salasTable = new JTable(tableModel);
         panel.add(new JScrollPane(salasTable), BorderLayout.CENTER);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel buttonPanel = new JPanel(new GridLayout());
 
         JButton btnEditar = new JButton("✏️ Editar Sala Seleccionada");
         btnEditar.addActionListener(e -> iniciarEdicion());
@@ -62,10 +62,14 @@ public class SalasGUI extends JFrame {
 
         JButton btnRecargar = new JButton("🔄 Recargar Lista");
         btnRecargar.addActionListener(e -> cargarDatosSalas());
-
+        JButton btnVolver = new JButton("Menu Principal");
+        btnVolver.addActionListener(e -> {
+            this.dispose();
+        });
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnEliminar);
         buttonPanel.add(btnRecargar);
+        buttonPanel.add(btnVolver);
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
         return panel;
