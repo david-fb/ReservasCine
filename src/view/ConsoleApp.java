@@ -10,6 +10,7 @@ import java.util.Scanner;
 import model.Asiento;
 import model.Funcion;
 import model.Pelicula;
+import model.Usuario;
 import services.AsientoService;
 import services.FuncionService;
 import services.PeliculasService;
@@ -69,7 +70,9 @@ public class ConsoleApp {
         System.out.print("Ingrese contrasena: ");
         String password = scanner.nextLine();
 
-        if (usuarioService.login(username, password)) {
+        Usuario usuario = usuarioService.login(username, password);
+        
+        if (usuario != null) {
             System.out.println("Inicio de Sesion exitoso");
             showUserMenu(scanner, username);
         } else {
