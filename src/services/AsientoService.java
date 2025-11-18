@@ -95,10 +95,10 @@ public class AsientoService {
     }
     
     
-    public List<Asiento> getTodosLosAsientos() {
+    public ArrayList<Asiento> getTodosLosAsientos() {
        
-        List<Asiento> listaAsientos = new ArrayList<>();
-        List<String> lineas = editor.getAll(FILENAME, SEPARADOR);
+        ArrayList<Asiento> listaAsientos = new ArrayList<>();
+        ArrayList<String> lineas = editor.getAll(FILENAME, SEPARADOR);
 
         for (String linea : lineas) {
             if (linea.trim().isEmpty()) continue;

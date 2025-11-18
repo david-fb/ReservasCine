@@ -4,6 +4,8 @@
  */
 package services;
 
+import java.util.ArrayList;
+import model.Reserva;
 import model.Sala;
 import utils.EditorArchivo;
 
@@ -18,6 +20,25 @@ public class SalaService {
     private final String SEPARADOR = ";";
     
     
+    public ArrayList<Sala> listarSalas() {
+        ArrayList<String> lineas = editor.getAll(FILENAME, SEPARADOR);
+        ArrayList<Sala> sala = new ArrayList<>();
+        
+        for(int i = 0; i < lineas.size(); i++){
+            String[] arrLinea = lineas.get(i).split(this.SEPARADOR);
+            System.out.println(arrLinea[1]);
+            sala.add(new Sala(Integer.parseInt(arrLinea[0]), arrLinea[1], Integer.parseInt(arrLinea[2]), arrLinea[3]));
+        }
+        
+        return sala;
+    }
+        public Sala getSalaById(int reserva_id){
+        
+        String id = String.valueOf(reserva_id);
+        String[] fLineas = editor.getRegistro(FILENAME, 0, id, SEPARADOR).split(SEPARADOR);
+        
+        return new Sala(Integer.parseInt(fLineas[0]), fLineas[1], Integer.parseInt(fLineas[2]), fLineas[3]);
+    }
     public void registrarSala(String nombre, int capacidad, String tipo) {
         
         editor.crearArchivo(FILENAME);
