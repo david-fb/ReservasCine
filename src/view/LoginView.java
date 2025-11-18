@@ -17,19 +17,19 @@ public class LoginView extends JFrame {
 
     public JButton btnIngresar;
     public JLabel linkRegistro;
-    
+
     public JTextField txtNombreRegistro;
     public JTextField txtCorreoRegistro;
-    public JPasswordField txtContrasenaRegistro;
+    public JTextField txtContrasenaRegistro;
     public JComboBox<String> comboRolRegistro;
     public JButton btnRegistrar;
     public JButton btnVolver;
-    
+
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cardPanel;
     private final static String LOGIN_VIEW = "LoginCard";
     private final static String REGISTRO_VIEW = "RegistroCard";
-    
+
     private final UsuarioService usuarioService = new UsuarioService();
 
     public LoginView() {
@@ -55,7 +55,7 @@ public class LoginView extends JFrame {
         Image imgEscalada = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         JLabel panelIzquierdo = new JLabel(new ImageIcon(imgEscalada));
         panelIzquierdo.setPreferredSize(new Dimension(350, 450));
-        
+
         add(panelIzquierdo, BorderLayout.WEST);
         cardPanel = new JPanel(cardLayout);
         JPanel loginPanel = createLoginPanel();
@@ -64,7 +64,7 @@ public class LoginView extends JFrame {
         cardPanel.add(registroPanel, REGISTRO_VIEW);
         add(cardPanel, BorderLayout.CENTER);
     }
-    
+
     private JPanel createLoginPanel() {
         JPanel panelDerechoLogin = new JPanel(new GridBagLayout());
         panelDerechoLogin.setBackground(AppStyle.COLOR_FONDO);
@@ -115,12 +115,12 @@ public class LoginView extends JFrame {
         panelDerechoLogin.add(btnIngresar, gbc);
 
         gbc.gridy = 4;
-        linkRegistro = new JLabel(textRegistro); 
+        linkRegistro = new JLabel(textRegistro);
         linkRegistro.setForeground(AppStyle.COLOR_PRIMARIO);
         linkRegistro.setHorizontalAlignment(CENTER);
         linkRegistro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        linkRegistro.addMouseListener(new MouseListener(){
+
+        linkRegistro.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardLayout.show(cardPanel, REGISTRO_VIEW);
@@ -145,19 +145,19 @@ public class LoginView extends JFrame {
             public void mouseExited(MouseEvent e) {
                 linkRegistro.setText(textRegistro);
             }
-      
+
         });
-        
+
         panelDerechoLogin.add(linkRegistro, gbc);
-        
+
         btnIngresar.addActionListener(e -> {
             String textUsuario = txtUsuario.getText();
             char[] charPassword = txtContrasena.getPassword();
-            String password = new String(charPassword); 
-            
+            String password = new String(charPassword);
+
             Usuario usuario = usuarioService.login(textUsuario, password);
-            
-            if(usuario == null){
+
+            if (usuario == null) {
                 JOptionPane.showMessageDialog(this, "Usuario y/o Contrasena incorrectos");
             } else {
                 SessionManager.getInstance().iniciarSesion(usuario);
@@ -166,10 +166,10 @@ public class LoginView extends JFrame {
                 this.dispose();
             }
         });
-        
+
         return panelDerechoLogin;
     }
-    
+
     private JPanel createRegistroPanel() {
         JPanel panelDerechoRegistro = new JPanel(new GridBagLayout());
         panelDerechoRegistro.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -183,13 +183,16 @@ public class LoginView extends JFrame {
         lblTituloRegistro.setFont(AppStyle.FUENTE_TITULO);
         lblTituloRegistro.setForeground(AppStyle.FONT_COLOR_PRIMARIO);
 
-        gbcRegistro.gridx = 0; gbcRegistro.gridy = 0; gbcRegistro.gridwidth = 2;
+        gbcRegistro.gridx = 0;
+        gbcRegistro.gridy = 0;
+        gbcRegistro.gridwidth = 2;
         panelDerechoRegistro.add(lblTituloRegistro, gbcRegistro);
 
         gbcRegistro.gridwidth = 1;
 
-        gbcRegistro.gridx = 0; gbcRegistro.gridy = 1;
-        
+        gbcRegistro.gridx = 0;
+        gbcRegistro.gridy = 1;
+
         JLabel lblNombre = new JLabel("Nombre:");
         lblNombre.setForeground(AppStyle.FONT_COLOR_SECUNDARIO);
         panelDerechoRegistro.add(lblNombre, gbcRegistro);
@@ -197,22 +200,42 @@ public class LoginView extends JFrame {
         txtNombreRegistro = new JTextField();
         panelDerechoRegistro.add(txtNombreRegistro, gbcRegistro);
 
-        gbcRegistro.gridx = 0; gbcRegistro.gridy = 2;
+        gbcRegistro.gridx = 0;
+        gbcRegistro.gridy = 2;
         panelDerechoRegistro.add(new JLabel("Usuario:"), gbcRegistro);
         gbcRegistro.gridx = 1;
         JTextField txtUsuario = new JTextField();
         panelDerechoRegistro.add(txtUsuario, gbcRegistro);
 
-        gbcRegistro.gridx = 0; gbcRegistro.gridy = 3;
+        gbcRegistro.gridx = 0;
+        gbcRegistro.gridy = 3;
         JLabel lblContrasena = new JLabel("Contraseña:");
         lblContrasena.setForeground(AppStyle.FONT_COLOR_SECUNDARIO);
         panelDerechoRegistro.add(lblContrasena, gbcRegistro);
         gbcRegistro.gridx = 1;
-        txtContrasenaRegistro = new JPasswordField();
+        txtContrasenaRegistro = new JTextField();
         panelDerechoRegistro.add(txtContrasenaRegistro, gbcRegistro);
 
-        gbcRegistro.gridx = 0; gbcRegistro.gridy = 4; gbcRegistro.gridwidth = 2;
+        gbcRegistro.gridx = 0;
+        gbcRegistro.gridy = 4;
+        gbcRegistro.gridwidth = 2;
         btnRegistrar = new PrimaryButton("Registrar");
+        btnRegistrar.addActionListener(e -> {
+            String rol = "CLIENTE";
+
+            try {
+                usuarioService.createUser(txtUsuario.getText(), txtNombreRegistro.getText(), txtContrasenaRegistro.getText(), rol);
+               JOptionPane.showMessageDialog(this, "Registro exitoso para: " + txtUsuario.getText());
+               
+               txtUsuario.setText("");
+               txtNombreRegistro.setText("");
+               txtContrasenaRegistro.setText("");
+               cardLayout.show(cardPanel, LOGIN_VIEW);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "No se pudo registrar el usuario: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         panelDerechoRegistro.add(btnRegistrar, gbcRegistro);
 
         gbcRegistro.gridy = 5;
@@ -226,11 +249,11 @@ public class LoginView extends JFrame {
         btnVolver.setBorder(null);
         btnVolver.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btnVolver.setForeground(AppStyle.FONT_COLOR_SECUNDARIO);
-        
+
         panelDerechoRegistro.add(btnVolver, gbcRegistro);
-        
+
         btnVolver.addActionListener(e -> cardLayout.show(cardPanel, LOGIN_VIEW));
-        
+
         return panelDerechoRegistro;
     }
 }
