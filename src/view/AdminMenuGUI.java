@@ -7,7 +7,6 @@ import services.ReservaService;
 
 import javax.swing.*;
 import java.awt.*;
-import main.VentanaProductos;
 import services.AsientoService;
 import services.UsuarioService;
 
